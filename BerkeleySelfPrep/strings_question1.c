@@ -1,25 +1,37 @@
 // Q1: What is the output of the following program?
+//
+// strtok splits a string by a delimiter, returning successive tokens.
+// On the first call pass the string; on subsequent calls pass NULL to
+// continue tokenizing the same string.
+//
+// str = "item1 item2 item3 item4 item5"
+// strtok splits on ' ', yielding: "item1", "item2", "item3", "item4", "item5"
+//
+// Output:  item1,item2,item3,item4,item5,
+// (trailing comma because the loop always appends one)
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-int main() {
+int main(void) {
+    const char *str = "item1 item2 item3 item4 item5";
 
-    char *t;
-    const char *str = "item1 item2 item3 item4 item5"; //declares a pointer to a constant string 'str' variable
-
-    char *tmp = (char *)malloc(strlen(str) + 1); //allocates memory equal to match the str variable
+    char *tmp = malloc(strlen(str) + 1);
     if (tmp == NULL) {
-        exit(1);
+        perror("malloc");
+        return 1;
     }
-    strcpy(tmp, str);  //copies str into tmp
-    t = strtok(tmp, " "); //splits a string based on a given delim.  So in this case, splits tmp based upon spaces
-    printf("%s,", t); //prints the result as one contigious string
 
-    while (t = strtok(0, " ")) {
+    strcpy(tmp, str);
+
+    char *t = strtok(tmp, " ");
+    while (t != NULL) {
         printf("%s,", t);
+        t = strtok(NULL, " ");
     }
+    printf("\n");
 
-    free(tmp); //deallocates memory
+    free(tmp);
     tmp = NULL;
+    return 0;
 }

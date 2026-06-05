@@ -1,27 +1,38 @@
-//Q1: Explain the difference between these two functions
-
+// Q1: Explain the difference between these two expressions.
+//
+// Version A:  x += (y += z)
+//   Evaluation order is right-to-left for the inner assignment:
+//     y += z  →  y = 1 + 1 = 2
+//     x += y  →  x = 1 + 2 = 3
+//   Output: x=3, y=2, z=1  ✓ compiles and runs correctly
+//
+// Version B:  (x += y) += z
+//   The sub-expression (x += y) is an assignment expression.  In C, the
+//   result of an assignment is an rvalue (not an lvalue), so applying
+//   another += to it attempts to assign to a temporary — which is illegal.
+//   gcc rejects this with: "lvalue required as left operand of assignment"
+//   This is UNDEFINED BEHAVIOR per the C standard and fails to compile.
+//
+// If it hypothetically compiled with one possible evaluation:
+//   x += y → x = 2 (but this result is not a valid assignment target)
+//   Attempting += z would be undefined; some might expect x=3, y=1, z=1
+//   but the compiler is not required to produce any particular result.
 #include <stdio.h>
 
-int main() {
+int main(void) {
     int x, y, z;
     x = y = z = 1;
-    x += (y += z);
-    printf("%d %d %d\n", x, y, z);
-}
-/*
-In this program, the output should be: 3, 2, 1
-*/
- 
- int main2() {
-    int x, y, z;
-    x = y = z = 1;
-    (x += y) += z;
-    printf("%d %d %d\n", x, y, z);
-}
-/*
-I get an error in VS Code indicating that main2 will cause compilation to fail due to syntax issues.  
-Attempting to compile with gcc does indeed fail.
 
-My assumption for what this code would theoretically produce is something like: 2, 1, 3
-However I could also understand a result of 2, 1, 2, assuming that the compiler is unable to correctly determine what to increment first
-*/
+    /* Version A — valid */
+    x += (y += z);
+    printf("Version A: x=%d y=%d z=%d\n", x, y, z);
+    /* Output: x=3 y=2 z=1 */
+
+    /* Version B — does not compile; shown here as a comment only
+     *
+     * x = y = z = 1;
+     * (x += y) += z;   // error: lvalue required as left operand of assignment
+     */
+
+    return 0;
+}

@@ -1,9 +1,0 @@
-""" https://www.codewars.com/kata/5656b6906de340bd1b0000ac/train/python """
-
-def longest(a,b):
-    x = list(set(a))
-    y = list(set(b))
-    z = x + y
-    
-    ans = sorted(list(set(z)))
-    print(''.join(ans))

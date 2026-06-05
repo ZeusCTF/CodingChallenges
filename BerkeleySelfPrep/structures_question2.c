@@ -1,15 +1,30 @@
-//Q2: What does the following code print?
+// Q2: What does the following code print?
+//
+// The anonymous struct has:
+//   char s[3]   → 3 bytes
+//   int  i      → 4 bytes (typically)
+//
+// Due to alignment, the compiler inserts 1 byte of padding after s[] so
+// that i begins on a 4-byte boundary.  Total sizeof(x) = 8.
+//
+// Expression 1: (char *)&x.i - x.s
+//   &x.i is the address of the int member.
+//   Cast to char* and subtract x.s (the address of s[0]).
+//   This is the byte offset of i within the struct = 4 (3 bytes of s + 1 pad).
+//   Output: 4
+//
+// Expression 2: sizeof(x) - sizeof(x.s) - sizeof(x.i)
+//   8 - 3 - 4 = 1  (the 1 byte of padding)
+//   Output: 1
 #include <stdio.h>
 
-int main() {
+int main(void) {
     struct {
-    char s[3];
-    int i;
+        char s[3];
+        int  i;
     } x;
-/*
-Defines a structure x, that has a character array and integer value
-*/
 
-    printf("%d\n", (char *)&x.i - x.s); // the cast here converts the address of x.i to a char pointer, then subtracts this from x.s.  This should be 4
-    printf("%d\n", sizeof(x) - sizeof(x.s) - sizeof(x.i)); // This subtracts the size of the structure, the char array, and the integer.  This should be 1
+    printf("%d\n", (int)((char *)&x.i - x.s));        /* 4 */
+    printf("%d\n", (int)(sizeof(x) - sizeof(x.s) - sizeof(x.i))); /* 1 */
+    return 0;
 }
