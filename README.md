@@ -1,6 +1,6 @@
 # Algorithm & Systems Programming Practice
 
-A personal repository of programming practice problems spanning systems programming in C, Python algorithms, and data structures. Built while preparing for software engineering interviews and coursework at UC Berkeley.
+A personal repository of programming practice problems spanning systems programming in C, Python algorithms, and data structures. Built while preparing for software engineering interviews.
 
 ## Structure
 
